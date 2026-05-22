@@ -18,7 +18,9 @@ export default function PrepPage() {
     fetchInterviewPrep().then(data => { setPrep(data as InterviewPrep[]); setLoading(false) })
   }, [])
 
-  const companies = [...new Set(prep.map(p => p.company_name).filter(Boolean))]
+  const companies = Array.from(
+    new Set(prep.map(p => p.company_name).filter((name): name is string => Boolean(name)))
+  )
 
   const filtered = prep.filter(p => {
     if (filterCompany && p.company_name !== filterCompany) return false
@@ -56,7 +58,7 @@ export default function PrepPage() {
       <div className="flex flex-wrap gap-3">
         <select value={filterCompany} onChange={e => setFilterCompany(e.target.value)} className="input w-auto">
           <option value="">All Companies</option>
-          {companies.map(c => <option key={c} value={c!}>{c}</option>)}
+          {companies.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
         <select value={filterCat} onChange={e => setFilterCat(e.target.value)} className="input w-auto">
           <option value="">All Categories</option>
